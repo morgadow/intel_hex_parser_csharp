@@ -1,0 +1,14 @@
+C:\workspace\CSharpTestApp\obj\Debug\net8.0\CSharpTestApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\workspace\CSharpTestApp\obj\Debug\net8.0\CSharpTestApp.AssemblyInfoInputs.cache
+C:\workspace\CSharpTestApp\obj\Debug\net8.0\CSharpTestApp.AssemblyInfo.cs
+C:\workspace\CSharpTestApp\obj\Debug\net8.0\CSharpTestApp.csproj.CoreCompileInputs.cache
+C:\workspace\CSharpTestApp\bin\Debug\net8.0\CSharpTestApp.exe
+C:\workspace\CSharpTestApp\bin\Debug\net8.0\CSharpTestApp.deps.json
+C:\workspace\CSharpTestApp\bin\Debug\net8.0\CSharpTestApp.runtimeconfig.json
+C:\workspace\CSharpTestApp\bin\Debug\net8.0\CSharpTestApp.dll
+C:\workspace\CSharpTestApp\bin\Debug\net8.0\CSharpTestApp.pdb
+C:\workspace\CSharpTestApp\obj\Debug\net8.0\CSharpTestApp.dll
+C:\workspace\CSharpTestApp\obj\Debug\net8.0\refint\CSharpTestApp.dll
+C:\workspace\CSharpTestApp\obj\Debug\net8.0\CSharpTestApp.pdb
+C:\workspace\CSharpTestApp\obj\Debug\net8.0\CSharpTestApp.genruntimeconfig.cache
+C:\workspace\CSharpTestApp\obj\Debug\net8.0\ref\CSharpTestApp.dll

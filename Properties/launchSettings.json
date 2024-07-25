@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "CSharpTestApp": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "Executable",
+      "executablePath": "C:\\workspace\\CSharpTestApp\\Program.cs"
+    }
+  }
+}

@@ -69,36 +69,4 @@ namespace Libraries.IntelHexParser
             return outcome;
         }
     }
-
-    /* 
-    /// <summary>
-    /// Represents an End of File Record (0x01) in an Intel Hex file
-    /// </summary>
-    internal class EndOfFileRecord : Record
-    {
-
-    }
-
-    /// <summary>
-    /// Represents an Extended Segment Address Record (0x02) in an Intel Hex file
-    /// </summary>
-    internal class ExtendedSegmentAddressRecord : Record
-    {
-        internal ushort LoadOffset { get; set; }
-    }
-
-    /// <summary>
-    /// Represents a Start Segment Address Record (0x03) in an Intel Hex file
-    /// </summary>
-    internal class StartSegmentAddressRecord : Record       // TODO needed?
-    {
-        internal ushort Segment { get; set; }
-        internal ushort Offset { get; set; }
-    }
-
-    internal class ExtendedLinearAddressRecord : Record     // TODO needed?
-    {
-        internal uint LoadOffset { get; set; }
-    }
-    */
 }
