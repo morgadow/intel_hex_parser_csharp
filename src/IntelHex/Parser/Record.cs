@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace Libraries.IntelHexParser
+namespace IntelHexParser
 {
     /// <summary>
     /// Intel Hex Record types

@@ -1,21 +1,16 @@
 ﻿
-using Libraries.IntelHexParser;
+using IntelHexParser;
 using System.Collections;
 using System.Text;
 
+// input and output files
+const string hexfile = "C:/workspace/intel_hex_parser_csharp/hexfile.hex";
+const string binfile = "C:/workspace/intel_hex_parser_csharp/binfile.bin";
 
-const string hexfile = "./hexfile.hex";
-const string binfile = "./binfile.bin";
-
-
+// deserialize hex file
 Serializer serializer = new Serializer();
-byte[] output = serializer.Deserialize(hexfile);
+byte defaultValue = 0xff;
+byte[] output = serializer.Deserialize(hexfile, defaultValue);
 
-
-using (var writer = new StreamWriter(binfile, false, Encoding.UTF8))
-{
-    foreach (var b in output)
-    {
-        writer.WriteLine(b);
-    }
-}
+// write to binary file
+File.WriteAllLines(binfile, output.Select(b => b.ToString()));
