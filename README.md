@@ -30,11 +30,31 @@ const string binfile = "C:/workspace/intel_hex_parser_csharp/binfile.bin";
 // deserialize hex file
 Serializer serializer = new Serializer();
 byte defaultValue = 0xff;
-byte[] output = serializer.Deserialize(hexfile, defaultValue);
+bool fillArrayBeforeFirstDataAddress = false;
+byte[] output = serializer.Deserialize(hexfile, defaultValue, fillArrayBeforeFirstDataAddress);
 
 // write to binary file
 File.WriteAllLines(binfile, output.Select(b => b.ToString()));
 ```
+
+### defaultValue
+
+A .hex file defines data placed onto specific memory addresses. \
+If only the .hex file address definitions are used, the binary array would have "holes" as normally not the entire memory address space is occupied. \
+For flashing onto a device it is normally required to flash a consistent data stream without interruptions. \
+This value ( 0 - 255 ) is used for all memory addresses which are not defined in the .hex file.
+
+> Default value: 0xFF
+
+
+###  fillArrayBeforeFirstDataAddress
+
+The first data package is not necessarily placed at the first address of the address space. \
+If this parameter is set to True, the whole address space before the first data package is set to the default value.
+If this parameter is set to False, the address space before the first data package is not included in the binary array which gets smaller.
+
+> Default value: false
+
 
 ## Known Issues
 

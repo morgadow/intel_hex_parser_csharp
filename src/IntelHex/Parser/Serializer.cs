@@ -40,10 +40,11 @@ namespace IntelHexParser
         /// <returns>Binary array with the content of the intel hex file</returns>
         /// <param name="filePath">Path to the intel hex file</param>
         /// <param name="defaultValue">Default value for missing bytes</param>  
-        public byte[] Deserialize(string filePath, byte defaultValue = 0xff)
+        /// <param name="fillArrayBeforeFirstDataAddress">Indicates if the array should be filled before the first data address</param>
+        public byte[] Deserialize(string filePath, byte defaultValue = 0xff, bool fillArrayBeforeFirstDataAddress = false)
         {
             string source = loadFileContent(filePath);
-            return parseHexFile(source, defaultValue);
+            return parseHexFile(source, defaultValue, fillArrayBeforeFirstDataAddress);
         }
 
         /// <summary>
@@ -52,7 +53,8 @@ namespace IntelHexParser
         /// <returns>Binary array with the content of the intel hex file</returns>
         /// <param name="source">Content of the intel hex file</param>
         /// <param name="defaultValue">Default value for missing bytes</param>
-        private byte[] parseHexFile(string source, byte defaultValue)
+        /// <param name="fillArrayBeforeFirstDataAddress">Indicates if the array should be filled before the first data address</param>
+        private byte[] parseHexFile(string source, byte defaultValue, bool fillArrayBeforeFirstDataAddress)
         {
             string[] lines = source.Split(Environment.NewLine.ToCharArray());
             lines = lines.Where(line => line.Length > 0).ToArray();
@@ -62,7 +64,8 @@ namespace IntelHexParser
             // parse line by line into an record and save all records in array
             Record record;
             Record[] records = new Record[lines.Length];
-            int segmentAddress = 0, maxAddress = 0, tmp;
+            int segmentAddress = 0, minAddress = 0, maxAddress = 0, tmp;
+            bool firstDataAddressFound = false;
             foreach (string l in lines)
             {
                 record = parseLine(l);
@@ -82,11 +85,21 @@ namespace IntelHexParser
                         segmentAddress = (record.Data[0] << 8 | record.Data[1]);
                         segmentAddress <<= 16;
                         break;
+                    case RecordType.Data:
+                        if (!firstDataAddressFound)
+                        {
+                            minAddress = segmentAddress + record.Address;
+                            firstDataAddressFound = true;
+                        }
+                        break;
                 }
                 tmp = segmentAddress + record.Address + record.DataLength;
                 if (tmp > maxAddress) { maxAddress = tmp; };
             }
-            finalDataSize = maxAddress;
+
+            // evaluate the final data size
+            if (!fillArrayBeforeFirstDataAddress) { finalDataSize = maxAddress - minAddress; }
+            else { finalDataSize = maxAddress; }
 
             // initialize output array
             byte[] outcome = new byte[finalDataSize];
@@ -105,7 +118,8 @@ namespace IntelHexParser
                 switch (r.Type)
                 {
                     case RecordType.Data:
-                        updateBinaryArray(r, segmentAddress, ref outcome);
+                        int offset = fillArrayBeforeFirstDataAddress ? minAddress : 0;
+                        updateBinaryArray(r, segmentAddress, offset, ref outcome);
                         break;
                     case RecordType.EndOfFile:
                         endReached = true;
@@ -213,12 +227,13 @@ namespace IntelHexParser
         /// </summary>
         /// <param name="record">Record to update the binary array with</param>
         /// <param name="segmentAddr">Offset to add to the address</param>
+        /// <param name="offset">Negative offset used if the file is not filled before the first record</param>
         /// <param name="binArray">Binary array to update</param>
-        private void updateBinaryArray(Record record, int segmentAddr, ref byte[] binArray)
+        private void updateBinaryArray(Record record, int segmentAddr, int offset, ref byte[] binArray)
         {
             for (int i = 0; i < record.DataLength; i++)
             {
-                var index = i + record.Address + segmentAddr;
+                var index = i + record.Address + segmentAddr - offset;
                 if (index >= binArray.Length)
                 {
                     throw new Exception("Binary array is too small, needed at least " + index + " bytes, have " + binArray.Length + " bytes!");
